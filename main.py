@@ -33,12 +33,12 @@ distillation.fit(x_train, y_train, epochs=50, batch_size=128)
 # Evaluate the model on the test data
 test_loss, test_accuracy = distillation.evaluate(x_test, y_test, verbose=2)
 
-# Make predictions using the trained model
+# Make predictions using the trained model+
 probabilities = distillation.predict(x_train)
 
 cnn = CNN_Mnist(temperature=1.0)
 
-cnn.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(),
+cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
