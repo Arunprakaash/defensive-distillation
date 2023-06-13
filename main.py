@@ -20,7 +20,7 @@ y_train = y_train.astype(int)
 y_test = y_test.astype(int)
 
 
-distillation = distillated_model(temperature=40)
+distillation = distillated_model(temperature=25.0)
 
 # Compile the model with appropriate loss and optimizer
 distillation.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
@@ -28,10 +28,7 @@ distillation.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_log
               metrics=['accuracy'])
 
 # Train the model on the training data
-distillation.fit(x_train, y_train, epochs=50, batch_size=128)
-
-# Evaluate the model on the test data
-test_loss, test_accuracy = distillation.evaluate(x_test, y_test, verbose=2)
+distillation.fit(x_train, y_train, epochs=25, batch_size=32)
 
 # Make predictions using the trained model+
 probabilities = distillation.predict(x_train)
@@ -42,7 +39,7 @@ cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
-cnn.fit(x_train,probabilities,epochs=50,batch_size=128)
+cnn.fit(x_train,probabilities,epochs=25,batch_size=32)
 
 test_probabilities = distillation.predict(x_test)
 
