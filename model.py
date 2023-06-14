@@ -1,15 +1,11 @@
 import tensorflow as tf
 
-def softmax(x, temperature):
-    x = x / temperature
-    exp_x = tf.exp(x)
-    softmax_x = exp_x / tf.reduce_sum(exp_x)
-    return softmax_x
+def softmax(soft_train_labels, temperature=1.0):
+    return tf.nn.softmax(soft_train_labels / temperature)
 
 class distillated_model(tf.keras.Model):
-    def __init__(self, temperature=40.0):
+    def __init__(self):
         super(distillated_model, self).__init__()
-        self.temperature = temperature
 
         self.conv1 = tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1))
         self.maxpool1 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
@@ -17,7 +13,7 @@ class distillated_model(tf.keras.Model):
         self.maxpool2 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
         self.flatten = tf.keras.layers.Flatten()
         self.fc1 = tf.keras.layers.Dense(units=128, activation='relu')
-        self.fc2 = tf.keras.layers.Dense(units=10)
+        self.fc2 = tf.keras.layers.Dense(units=10,activation='softmax')
 
     def call(self, inputs):
         x = self.conv1(inputs)
@@ -26,14 +22,12 @@ class distillated_model(tf.keras.Model):
         x = self.maxpool2(x)
         x = self.flatten(x)
         x = self.fc1(x)
-        logits = self.fc2(x)
-        probabilities = softmax(logits, temperature=self.temperature)
+        probabilities = self.fc2(x)
         return probabilities
 
 class CNN_Mnist(tf.keras.Model):
-    def __init__(self, temperature=1.0):
+    def __init__(self):
         super(CNN_Mnist, self).__init__()
-        self.temperature = temperature
 
         self.conv1 = tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), activation='relu', input_shape=(28, 28, 1))
         self.maxpool1 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
@@ -41,7 +35,7 @@ class CNN_Mnist(tf.keras.Model):
         self.maxpool2 = tf.keras.layers.MaxPooling2D(pool_size=(2, 2))
         self.flatten = tf.keras.layers.Flatten()
         self.fc1 = tf.keras.layers.Dense(units=128, activation='relu')
-        self.fc2 = tf.keras.layers.Dense(units=10)
+        self.fc2 = tf.keras.layers.Dense(units=10,activation='softmax')
 
     def call(self, inputs):
         x = self.conv1(inputs)
@@ -50,6 +44,5 @@ class CNN_Mnist(tf.keras.Model):
         x = self.maxpool2(x)
         x = self.flatten(x)
         x = self.fc1(x)
-        logits = self.fc2(x)
-        probabilities = softmax(logits, temperature=self.temperature)
+        probabilities = self.fc2(x)
         return probabilities

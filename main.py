@@ -1,4 +1,4 @@
-from model import distillated_model, CNN_Mnist
+from model import distillated_model, CNN_Mnist, softmax
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -20,29 +20,35 @@ y_train = y_train.astype(int)
 y_test = y_test.astype(int)
 
 
-distillation = distillated_model(temperature=25.0)
+#teacher model
 
-# Compile the model with appropriate loss and optimizer
-distillation.compile(loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+distillation = distillated_model()
+
+distillation.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
-# Train the model on the training data
-distillation.fit(x_train, y_train, epochs=25, batch_size=32)
+distillation.fit(x_train, y_train, epochs=25, batch_size=64,validation_data=(x_test,y_test))
 
-# Make predictions using the trained model+
-probabilities = distillation.predict(x_train)
+soft_train_labels = softmax(distillation.predict(x_train),40.0)
 
-cnn = CNN_Mnist(temperature=1.0)
+
+# student model
+
+cnn = CNN_Mnist()
 
 cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
-cnn.fit(x_train,probabilities,epochs=25,batch_size=32)
+cnn.fit(x_train,soft_train_labels,epochs=25,batch_size=64,validation_data=(x_test,y_test))
 
-test_probabilities = distillation.predict(x_test)
 
-test_loss, test_acc = cnn.evaluate(x_test, test_probabilities)
+# cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+#               optimizer=tf.keras.optimizers.Adam(),
+#               metrics=['accuracy'])
 
-cnn.save('defensive_distillation.h5')
+# cnn.fit(x_train, y_train, batch_size=128, epochs=20, validation_data=(x_test, y_test))
+
+
+cnn.save('defensive_distillation')
