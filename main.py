@@ -51,4 +51,4 @@ cnn.fit(x_train,soft_train_labels,epochs=25,batch_size=64,validation_data=(x_tes
 # cnn.fit(x_train, y_train, batch_size=128, epochs=20, validation_data=(x_test, y_test))
 
 
-cnn.save('defensive_distillation')
+cnn.save_weights('defensive_distillation.h5')
