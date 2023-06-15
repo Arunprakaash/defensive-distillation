@@ -25,12 +25,4 @@ cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
 
 cnn.fit(mnist.x_train,soft_train_labels,epochs=25,batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
 
-
-# cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
-#               optimizer=tf.keras.optimizers.Adam(),
-#               metrics=['accuracy'])
-
-# cnn.fit(x_train, y_train, batch_size=128, epochs=20, validation_data=(mnist.x_test, mnist.y_test))
-
-
-cnn.save_model('model/defensive_distillation')
+cnn.save_model('model/defensive_distillation/model')

@@ -11,7 +11,7 @@ labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'
 
 # Model without distillation
 
-model = md.CNN_Mnist.load_model('model\cnn_mnist')
+model = md.CNN_Mnist.load_model('model\model_without_distillation\cnn_mnist')
 
 
 # FGSM attack parameters

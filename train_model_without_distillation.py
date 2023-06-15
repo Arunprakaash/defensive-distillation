@@ -11,4 +11,4 @@ model.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
 
 model.fit(mnist.x_train, mnist.y_train, epochs=25, batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
 
-model.save_model('model/cnn_mnist')
+model.save_model('model\model_without_distillation\cnn_mnist')
