@@ -12,7 +12,7 @@ labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'
 # Model without distillation
 
 model = md.CNN_Mnist.load_model('model\model_without_distillation\cnn_mnist')
-
+defensive_distillation = md.distillated_model.load_model('model\defensive_distillation\model')
 
 # FGSM attack parameters
 
@@ -35,3 +35,4 @@ plt.show()
 
 print(labels[model.predict(image.reshape((1, 28, 28, 1))).argmax()])
 print(labels[model.predict(adversarial).argmax()])
+print(labels[defensive_distillation.predict(adversarial).argmax()])
