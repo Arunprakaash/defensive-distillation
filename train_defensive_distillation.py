@@ -4,25 +4,25 @@ import load_mnist as mnist
 
 #teacher model
 
-distillation = ModelArchitecture()
+initial_network = ModelArchitecture()
 
-distillation.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+initial_network.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
-distillation.fit(mnist.x_train, mnist.y_train, epochs=25, batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
+initial_network.fit(mnist.x_train, mnist.y_train, epochs=25, batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
 
-soft_train_labels = softmax(distillation.predict(mnist.x_train),40.0)
+soft_train_labels = softmax(initial_network.predict(mnist.x_train),40.0)
 
 
 # student model
 
-cnn = ModelArchitecture()
+distillated_network = ModelArchitecture()
 
-cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
+distillated_network.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
 
-cnn.fit(mnist.x_train,soft_train_labels,epochs=25,batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
+distillated_network.fit(mnist.x_train,soft_train_labels,epochs=25,batch_size=64,validation_data=(mnist.x_test,mnist.y_test))
 
-cnn.save_model('model/defensive_distillation/model')
+distillated_network.save_model('model/defensive_distillation/model')
