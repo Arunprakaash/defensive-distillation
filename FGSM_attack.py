@@ -2,20 +2,36 @@ import tensorflow as tf
 import load_mnist as mnist
 import numpy as np
 import model as md
+import matplotlib.pyplot as plt
+
+epsilon = 0.1
+image = mnist.x_train[0]
+label = mnist.y_train[0]
+labels = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+
+# Model without distillation
 
 model = md.CNN_Mnist.load_model('model\cnn_mnist')
+
+
 # FGSM attack parameters
-epsilon = 0.1
 
-# Generate adversarial examples using FGSM
-x_test_adv = mnist.x_test + epsilon * np.sign(tf.GradientTape().gradient(model(mnist.x_test), mnist.x_test))
+def adversarial_pattern(image, label):
+    image = tf.cast(image, tf.float32)
+    with tf.GradientTape() as tape:
+        tape.watch(image)
+        prediction = model(image)
+        loss = tf.keras.losses.MSE(label, prediction)
+    
+    gradient = tape.gradient(loss, image)
+    signed_grad = tf.sign(gradient)
+    return signed_grad
 
-# Evaluate the model on normal and adversarial examples
-_, acc_normal = model.evaluate(mnist.x_test, mnist.y_test, verbose=0)
-_, acc_adv = model.evaluate(mnist.x_test_adv, mnist.y_test, verbose=0)
+perturbations = adversarial_pattern(image.reshape((1, 28, 28, 1)), label).numpy()
+adversarial = image + perturbations * epsilon
 
-print(f"Accuracy on normal examples: {acc_normal * 100}%")
-print(f"Accuracy on adversarial examples (FGSM attack): {acc_adv * 100}%")
+plt.imshow(adversarial.reshape((28, 28, 1)))
+plt.show()
 
-print(model.predict(mnist.x_test[0]),mnist.y_test[0])
-print(model.predict(x_test_adv[0]),mnist.y_test[0])
+print(labels[model.predict(image.reshape((1, 28, 28, 1))).argmax()])
+print(labels[model.predict(adversarial).argmax()])
