@@ -20,10 +20,10 @@ Defensive distillation involves two main steps: the initial model training and t
 
 3. **Inference with the Student Model:** Once the student model is trained, it can be used for inference on new, unseen examples. The distilled model aims to generalize better and be more robust to adversarial attacks compared to the original model.
 
-![model pipeline](/images/model_pipeline.jpg)
+![model pipeline](model_pipeline.jpg)
 
 ## Soft Labels Formula with Temperature T
-![softmax formula with temperature t](/images/soft_label_formula.jpg)
+![softmax formula with temperature t](soft_label_formula.jpg)
 
 **T is set to 40 based on the paper**
 
@@ -77,7 +77,7 @@ The model achieved an accuracy of 98.4% on the MNIST dataset without applying an
 
 The trained model was tested with an adversarial sample generated using the Fast Gradient Sign Method (FGSM) attack on a test sample from the MNIST dataset. The attacked sample is displayed below:
 
-![Attacked Sample](/images/4.jpg)
+![Attacked Sample](4.jpg)
 
 ### Predictions
 
