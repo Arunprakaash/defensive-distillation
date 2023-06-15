@@ -24,6 +24,18 @@ class distillated_model(tf.keras.Model):
         x = self.fc1(x)
         probabilities = self.fc2(x)
         return probabilities
+    
+    def save_model(self, filepath):
+        # Save the model weights
+        self.save_weights(filepath)
+
+    @classmethod
+    def load_model(cls, filepath):
+        # Create an instance of the model
+        model = cls()
+        # Load the saved weights
+        model.load_weights(filepath)
+        return model
 
 class CNN_Mnist(tf.keras.Model):
     def __init__(self):
@@ -46,3 +58,12 @@ class CNN_Mnist(tf.keras.Model):
         x = self.fc1(x)
         probabilities = self.fc2(x)
         return probabilities
+    
+    def save_model(self, filepath):
+        self.save_weights(filepath)
+
+    @classmethod
+    def load_model(cls, filepath):
+        model = cls()
+        model.load_weights(filepath)
+        return model

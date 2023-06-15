@@ -1,8 +1,9 @@
 import tensorflow as tf
 import load_mnist as mnist
 import numpy as np
+import model as md
 
-model = tf.keras.models.load_model('model\cnn_mnist.h5')
+model = md.CNN_Mnist.load_model('model\cnn_mnist')
 # FGSM attack parameters
 epsilon = 0.1
 
