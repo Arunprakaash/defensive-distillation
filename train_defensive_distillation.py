@@ -1,10 +1,10 @@
-from model import distillated_model, CNN_Mnist, softmax
+from model import ModelArchitecture, softmax
 import tensorflow as tf
 import load_mnist as mnist
 
 #teacher model
 
-distillation = distillated_model()
+distillation = ModelArchitecture()
 
 distillation.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
@@ -17,7 +17,7 @@ soft_train_labels = softmax(distillation.predict(mnist.x_train),40.0)
 
 # student model
 
-cnn = CNN_Mnist()
+cnn = ModelArchitecture()
 
 cnn.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),

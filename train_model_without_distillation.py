@@ -1,9 +1,9 @@
-from model import CNN_Mnist
+from model import ModelArchitecture
 import tensorflow as tf
 import load_mnist as mnist
 
 
-model = CNN_Mnist()
+model = ModelArchitecture()
 
 model.compile(loss=tf.keras.losses.CategoricalCrossentropy(),
               optimizer=tf.keras.optimizers.Adam(),
