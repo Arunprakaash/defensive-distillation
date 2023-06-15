@@ -20,10 +20,10 @@ Defensive distillation involves two main steps: the initial model training and t
 
 3. **Inference with the Student Model:** Once the student model is trained, it can be used for inference on new, unseen examples. The distilled model aims to generalize better and be more robust to adversarial attacks compared to the original model.
 
-![model pipeline](images\model_pipeline.png)
+![model pipeline](images/model_pipeline.png)
 
 ## Soft Labels Formula with Temperature T
-![softmax formula with temperature t](images\soft_label_formula.png)
+![softmax formula with temperature t](images/soft_label_formula.png)
 
 **T is set to 40 based on the paper**
 
